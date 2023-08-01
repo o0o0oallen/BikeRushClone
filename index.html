@@ -1,0 +1,87 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Bike Rush</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="true">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="360-fullscreen" content="true">
+    <meta name="laya" screenorientation="landscape">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <script>
+        function setLoadingVisible(visible, isEnd, loadCall) {
+            loadCall();
+        }
+
+        function setBannerVisible(index, visible) {
+        };
+    </script>
+    <script>
+        var myYYGSDK = null;
+        var myAdsManager = null;
+
+        function myRequestAd(adUrl, successEventHandler, errorEventHandler) {
+            // console.error('my requestAd', arguments);
+            setLoadingVisible(true, false, function() {
+                successEventHandler && successEventHandler.method && successEventHandler.method();
+            })
+        }
+
+        function myShowInterstitial(callback) {
+            // console.error('myShowInterstitial', callback);
+            setLoadingVisible(true, false, function() {
+                callback && callback();
+            })
+        }
+        Object.defineProperty(window, 'YYGSDK', {
+            set(vaule) {
+                // 做一些修改
+                // 报错;此时vaule.adsManager为undefined，说明还没有挂载这个属性
+                // console.log('vaule.adsManager.request', vaule.adsManager.request);
+                myYYGSDK = vaule;
+                Object.defineProperty(myYYGSDK, 'adsManager', {
+                    set(vaule) {
+                        myAdsManager = vaule;
+                        Object.defineProperty(myAdsManager, 'request', {
+                            get() {
+                                return myRequestAd;
+                            }
+                        })
+                    },
+                    get() {
+                        return myAdsManager;
+                    }
+                });
+
+                Object.defineProperty(myYYGSDK, 'showInterstitial', {
+                    get() {
+                        return myShowInterstitial;
+                    },
+                })
+            },
+            get() {
+                return myYYGSDK;
+            }
+        });
+    </script>
+    <script src="./YYGSDK.js"></script>
+
+</head>
+
+<body style="margin: 0px; overflow: hidden; user-select: none; -webkit-tap-highlight-color: rgba(200, 200, 200, 0);">
+    <script>
+        function loadLib(url) {
+            var script = document.createElement("script");
+            script.async = false;
+            script.src = url;
+            document.body.appendChild(script);
+        }
+    </script>
+    <script src="./NewAdsManager.js"></script>
+    <script src="./index.js"></script><!--<script src="./libs/laya.core.js"></script><script src="./libs/laya.ui.js"></script><script src="./libs/laya.d3.js"></script><script src="./libs/jslinq.min.js"></script>--><!--<script src="./js/bundle_.js"></script>-->
+    <script src="./index_files/minigame.js"></script><div id="layaContainer"><canvas id="layaCanvas" width="1865" height="979" style="position: absolute; left: 0px; top: 0px; background: rgb(0, 0, 0); transform-origin: 0px 0px 0px; transform: matrix(1, 0, 0, 1, 0, 0);"></canvas><div style="position: absolute; z-index: 100000;"></div></div><canvas width="1024" height="512" style="left: -10000px; position: absolute;"></canvas></body></html>
